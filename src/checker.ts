@@ -8,4 +8,7 @@ export async function check(content: string) {
   }
 }
 
-const regexes = [/^[^@\s]+@[^@\s]+\.[^@\s]+$/].map(r => new RegExp(r))
+const regexes = [
+  /^[^@\s]+@[^@\s]+\.[^@\s]+$/, // emails
+  /-----BEGIN[A-Z\s+]*PRIVATE KEY(?:\sBLOCK)?-----/ // SSH keys
+].map(r => new RegExp(r))
