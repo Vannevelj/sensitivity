@@ -23,9 +23,12 @@ describe('email address', () => {
   })
 
   describe('valid', () => {
-    test.each(['fold@home', 'test.me', '@@@', '...'])('%s', (email: string) => {
-      check(email)
-      expect(setFailed).not.toHaveBeenCalled()
-    })
+    test.each(['fold@home', 'test.me', '@@@', '...', '', ' ', '@me'])(
+      '%s',
+      (email: string) => {
+        check(email)
+        expect(setFailed).not.toHaveBeenCalled()
+      }
+    )
   })
 })

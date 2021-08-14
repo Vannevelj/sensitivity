@@ -5,6 +5,9 @@ inputs:
   path:
     required: true
     description: 'The path to your root folder, e.g. src'
+  ignorePaths:
+    required: false
+    description: 'Optional: globs that will be ignored'
 runs:
   using: 'node12'
   main: 'dist/index.js'

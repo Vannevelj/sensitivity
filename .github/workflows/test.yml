@@ -22,3 +22,4 @@ jobs:
       - uses: ./
         with:
           path: src
+          ignorePaths: ['src/__tests__/checker.*.test.ts']
