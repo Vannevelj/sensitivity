@@ -20,5 +20,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./
-      - with:
-          - path: src
+        with:
+          path: src
