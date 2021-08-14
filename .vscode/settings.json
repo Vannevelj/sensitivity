@@ -1,0 +1,10 @@
+{
+    "editor.formatOnSave": false,
+    "javascript.format.enable": false,
+    "javascript.validate.enable": false,
+    "typescript.validate.enable": true,
+    "files.autoSave": "off",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+  }

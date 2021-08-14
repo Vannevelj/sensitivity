@@ -1,16 +1,18 @@
-import * as core from '@actions/core'
+import { getInput, setFailed, info } from '@actions/core'
+import * as glob from '@actions/glob'
+import { check } from './checker'
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+    info('Starting sensitivity check..')
+    const path = getInput('path', { required: true })
 
-    core.debug(new Date().toTimeString())
-    core.debug(new Date().toTimeString())
-
-    core.setOutput('time', new Date().toTimeString())
+    const globber = await glob.create(`${path}/**/*.*`)
+    for await (const file of globber.globGenerator()) {
+      await check(file)
+    }
   } catch (error) {
-    core.setFailed(error.message)
+    setFailed(error.message)
   }
 }
 

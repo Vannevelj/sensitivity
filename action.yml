@@ -1,6 +1,10 @@
 name: 'Sensitivity'
 description: 'Detect sensitive information inside code changes'
 author: 'Jeroen Vannevel'
+inputs:
+  path:
+    required: true
+    description: 'The path to your root folder, e.g. src'
 runs:
   using: 'node12'
   main: 'dist/index.js'
