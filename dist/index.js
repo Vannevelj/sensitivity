@@ -15,18 +15,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.check = void 0;
 const core_1 = __nccwpck_require__(186);
-const fs_1 = __importDefault(__nccwpck_require__(747));
-function check(filePath) {
+function check(content) {
     return __awaiter(this, void 0, void 0, function* () {
-        core_1.info(`Checking ${filePath}`);
-        const buffer = yield fs_1.default.promises.readFile(filePath);
-        const content = buffer.toString();
         for (const regex of regexes) {
             if (regex.test(content)) {
                 core_1.setFailed('Sensitive data found!');
@@ -35,7 +28,14 @@ function check(filePath) {
     });
 }
 exports.check = check;
-const regexes = ['.*'].map(r => new RegExp(r));
+const regexes = [
+    /^[^@\s]+@[^@\s]+\.[^@\s]+$/,
+    /-----BEGIN[A-Z\s+]*PRIVATE KEY(?:\sBLOCK)?-----/,
+    /AKIA[A-Z0-9]{16}/,
+    /[a-zA-Z0-9]{13}\/[a-zA-Z0-9]{7}\/[a-zA-Z0-9]{18}/,
+    /AIza[0-9A-Za-z_]{35}/,
+    /\b(?:api[_-]?key|secret|(?:access|api)?[_-]?token)\s?[:=]/i // Generic secrets
+].map(r => new RegExp(r));
 
 
 /***/ }),
@@ -80,10 +80,14 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_1 = __nccwpck_require__(186);
 const glob = __importStar(__nccwpck_require__(90));
 const checker_1 = __nccwpck_require__(922);
+const fs_1 = __importDefault(__nccwpck_require__(747));
 function run() {
     var e_1, _a;
     return __awaiter(this, void 0, void 0, function* () {
@@ -94,7 +98,10 @@ function run() {
             try {
                 for (var _b = __asyncValues(globber.globGenerator()), _c; _c = yield _b.next(), !_c.done;) {
                     const file = _c.value;
-                    yield checker_1.check(file);
+                    core_1.info(`Checking ${file}`);
+                    const buffer = yield fs_1.default.promises.readFile(file);
+                    const content = buffer.toString();
+                    yield checker_1.check(content);
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
