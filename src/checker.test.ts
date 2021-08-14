@@ -84,4 +84,28 @@ describe('checker', () => {
       })
     })
   })
+
+  describe('AWS_SECRET_ACCESS_KEY', () => {
+    describe('invalid', () => {
+      test.each(['wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'])(
+        '%s',
+        (key: string) => {
+          check(key)
+          expect(setFailed).toHaveBeenCalled()
+        }
+      )
+    })
+
+    describe('valid', () => {
+      test.each([
+        'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPL',
+        'wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY',
+        'wJalrXUtnFEMI0K7MDENG0bPxRfiCYEXAMPLEKEY',
+        ''
+      ])('%s', (key: string) => {
+        check(key)
+        expect(setFailed).not.toHaveBeenCalled()
+      })
+    })
+  })
 })
