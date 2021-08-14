@@ -10,6 +10,8 @@ describe('email address', () => {
   describe('invalid', () => {
     test.each([
       'test@home.be',
+      '"test@home.be"',
+      "'test@home.be'",
       '125@example.com',
       'hello.me@google.test',
       'wowee@hello.co.uk',
