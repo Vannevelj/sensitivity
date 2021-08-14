@@ -1,6 +1,6 @@
 import { getInput, setFailed, info, debug } from '@actions/core'
-import * as glob from '@actions/glob'
 import { check } from './checker'
+import * as glob from '@actions/glob'
 import fs from 'fs'
 
 async function run(): Promise<void> {
