@@ -15,6 +15,7 @@ async function run(): Promise<void> {
       const ignoredGlobber = await glob.create(`${ignoredPath}`)
       for await (const ignoredFile of ignoredGlobber.globGenerator()) {
         ignoredFiles.add(ignoredFile)
+        info(`Marking ${ignoredFile} as ignored`)
       }
     }
 
