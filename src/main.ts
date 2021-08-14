@@ -12,6 +12,7 @@ async function run(): Promise<void> {
     const ignoredFiles: Set<string> = new Set()
 
     for (const ignoredPath of ignoredPathsArray) {
+      info(`Found ignored path: ${ignoredPath}`)
       const ignoredGlobber = await glob.create(`${ignoredPath}`)
       for await (const ignoredFile of ignoredGlobber.globGenerator()) {
         ignoredFiles.add(ignoredFile)
