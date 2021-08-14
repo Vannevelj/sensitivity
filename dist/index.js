@@ -89,27 +89,52 @@ const glob = __importStar(__nccwpck_require__(90));
 const checker_1 = __nccwpck_require__(922);
 const fs_1 = __importDefault(__nccwpck_require__(747));
 function run() {
-    var e_1, _a;
+    var e_1, _a, e_2, _b;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             core_1.info('Starting sensitivity check..');
             const path = core_1.getInput('path', { required: true });
+            const ignoredPathsRaw = core_1.getInput('ignorePaths', { required: false });
+            const ignoredPathsArray = JSON.parse(ignoredPathsRaw);
+            const ignoredFiles = new Set();
+            for (const ignoredPath of ignoredPathsArray) {
+                core_1.info(`Found ignored path: ${ignoredPath}`);
+                const ignoredGlobber = yield glob.create(`${ignoredPath}`);
+                try {
+                    for (var _c = (e_1 = void 0, __asyncValues(ignoredGlobber.globGenerator())), _d; _d = yield _c.next(), !_d.done;) {
+                        const ignoredFile = _d.value;
+                        ignoredFiles.add(ignoredFile);
+                        core_1.info(`Marking ${ignoredFile} as ignored`);
+                    }
+                }
+                catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                finally {
+                    try {
+                        if (_d && !_d.done && (_a = _c.return)) yield _a.call(_c);
+                    }
+                    finally { if (e_1) throw e_1.error; }
+                }
+            }
             const globber = yield glob.create(`${path}/**/*.*`);
             try {
-                for (var _b = __asyncValues(globber.globGenerator()), _c; _c = yield _b.next(), !_c.done;) {
-                    const file = _c.value;
-                    core_1.info(`Checking ${file}`);
+                for (var _e = __asyncValues(globber.globGenerator()), _f; _f = yield _e.next(), !_f.done;) {
+                    const file = _f.value;
+                    core_1.info(`Checking ${file}..`);
+                    if (ignoredFiles.has(file)) {
+                        core_1.info(`Skipping validation, path is ignored`);
+                        continue;
+                    }
                     const buffer = yield fs_1.default.promises.readFile(file);
                     const content = buffer.toString();
                     yield checker_1.check(content);
                 }
             }
-            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            catch (e_2_1) { e_2 = { error: e_2_1 }; }
             finally {
                 try {
-                    if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
+                    if (_f && !_f.done && (_b = _e.return)) yield _b.call(_e);
                 }
-                finally { if (e_1) throw e_1.error; }
+                finally { if (e_2) throw e_2.error; }
             }
         }
         catch (error) {
