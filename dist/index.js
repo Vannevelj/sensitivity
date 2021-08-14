@@ -29,7 +29,7 @@ function check(content) {
 }
 exports.check = check;
 const regexes = [
-    /^[^@\s]+@[^@\s]+\.[^@\s]+$/,
+    /[^@\s]+@[^@\s]+\.[^@\s]+/,
     /-----BEGIN[A-Z\s+]*PRIVATE KEY(?:\sBLOCK)?-----/,
     /AKIA[A-Z0-9]{16}/,
     /[a-zA-Z0-9]{13}\/[a-zA-Z0-9]{7}\/[a-zA-Z0-9]{18}/,
