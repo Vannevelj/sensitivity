@@ -59,4 +59,29 @@ describe('checker', () => {
       })
     })
   })
+
+  describe('AWS_ACCESS_KEY_ID', () => {
+    describe('invalid', () => {
+      test.each(['AKIAIOSFODNN7EXAMPLE', 'AKIAJYBSD6XWRPL375LT'])(
+        '%s',
+        (key: string) => {
+          check(key)
+          expect(setFailed).toHaveBeenCalled()
+        }
+      )
+    })
+
+    describe('valid', () => {
+      test.each([
+        'AKIAIOSFODNN7EXAMPL*',
+        'AKIA is a nice car',
+        'POLOIOSFODNN7EXAMPL',
+        '',
+        'AKIAIOSFODNN7'
+      ])('%s', (key: string) => {
+        check(key)
+        expect(setFailed).not.toHaveBeenCalled()
+      })
+    })
+  })
 })
