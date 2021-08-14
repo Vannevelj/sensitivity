@@ -62,13 +62,16 @@ describe('checker', () => {
 
   describe('AWS_ACCESS_KEY_ID', () => {
     describe('invalid', () => {
-      test.each(['AKIAIOSFODNN7EXAMPLE', 'AKIAJYBSD6XWRPL375LT'])(
-        '%s',
-        (key: string) => {
-          check(key)
-          expect(setFailed).toHaveBeenCalled()
-        }
-      )
+      test.each([
+        'AKIAIOSFODNN7EXAMPLE',
+        'AKIAJYBSD6XWRPL375LT',
+        '"AKIAIOSFODNN7EXAMPLE"',
+        "'AKIAIOSFODNN7EXAMPLE'",
+        'AKIAIOSFODNN7EXAMPLEERRRR'
+      ])('%s', (key: string) => {
+        check(key)
+        expect(setFailed).toHaveBeenCalled()
+      })
     })
 
     describe('valid', () => {
@@ -76,7 +79,6 @@ describe('checker', () => {
         'AKIAIOSFODNN7EXAMPL*',
         'AKIA is a nice car',
         'POLOIOSFODNN7EXAMPL',
-        'AKIAIOSFODNN7EXAMPLEERRRR',
         '',
         'AKIAIOSFODNN7'
       ])('%s', (key: string) => {
@@ -88,19 +90,20 @@ describe('checker', () => {
 
   describe('AWS_SECRET_ACCESS_KEY', () => {
     describe('invalid', () => {
-      test.each(['wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'])(
-        '%s',
-        (key: string) => {
-          check(key)
-          expect(setFailed).toHaveBeenCalled()
-        }
-      )
+      test.each([
+        'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY',
+        '"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"',
+        "'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'",
+        'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY2'
+      ])('%s', (key: string) => {
+        check(key)
+        expect(setFailed).toHaveBeenCalled()
+      })
     })
 
     describe('valid', () => {
       test.each([
         'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPL',
-        'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY2',
         'wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY',
         'wJalrXUtnFEMI0K7MDENG0bPxRfiCYEXAMPLEKEY',
         ''
@@ -115,7 +118,10 @@ describe('checker', () => {
     describe('invalid', () => {
       test.each([
         'AIzaSyBdJ88HN7LTGkHHK5whfaVv8a5ozlx2E_k',
-        'AIzaSyBdJ88HN7LTGkHHK5whfaVv8a5ozlx2Eyk'
+        'AIzaSyBdJ88HN7LTGkHHK5whfaVv8a5ozlx2Eyk',
+        '"AIzaSyBdJ88HN7LTGkHHK5whfaVv8a5ozlx2E_k"',
+        "'AIzaSyBdJ88HN7LTGkHHK5whfaVv8a5ozlx2E_k'",
+        'AIzaSyBdJ88HN7LTGkHHK5whfaVv8a5ozlx2E_ky'
       ])('%s', (key: string) => {
         check(key)
         expect(setFailed).toHaveBeenCalled()
@@ -125,7 +131,6 @@ describe('checker', () => {
     describe('valid', () => {
       test.each([
         'AIzaSyBdJ88HN7LTGkHHK5whfaVv8a5ozlx2E_',
-        'AIzaSyBdJ88HN7LTGkHHK5whfaVv8a5ozlx2E_ky',
         'AIzaSyBdJ88HN7LTGkHHK5whfaVv8a5ozlx2Ek',
         'AizaSyBdJ88HN7LTGkHHK5whfaVv8a5ozlx2E_k'
       ])('%s', (key: string) => {
