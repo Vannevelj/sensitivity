@@ -15,15 +15,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.check = void 0;
 const core_1 = __nccwpck_require__(186);
+const fs_1 = __importDefault(__nccwpck_require__(747));
 function check(filePath) {
     return __awaiter(this, void 0, void 0, function* () {
         core_1.info(`Checking ${filePath}`);
+        const buffer = yield fs_1.default.promises.readFile(filePath);
+        const content = buffer.toString();
+        for (const regex of regexes) {
+            if (regex.test(content)) {
+                core_1.setFailed('Sensitive data found!');
+            }
+        }
     });
 }
 exports.check = check;
+const regexes = ['.*'].map(r => new RegExp(r));
 
 
 /***/ }),
