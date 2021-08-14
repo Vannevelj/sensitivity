@@ -1,4 +1,4 @@
-import { getInput, setFailed, info } from '@actions/core'
+import { getInput, setFailed, info, debug } from '@actions/core'
 import * as glob from '@actions/glob'
 import { check } from './checker'
 import fs from 'fs'
@@ -12,11 +12,10 @@ async function run(): Promise<void> {
     const ignoredFiles: Set<string> = new Set()
 
     for (const ignoredPath of ignoredPathsArray) {
-      info(`Found ignored path: ${ignoredPath}`)
+      debug(`Found ignored path: ${ignoredPath}`)
       const ignoredGlobber = await glob.create(`${ignoredPath}`)
       for await (const ignoredFile of ignoredGlobber.globGenerator()) {
         ignoredFiles.add(ignoredFile)
-        info(`Marking ${ignoredFile} as ignored`)
       }
     }
 
@@ -24,7 +23,7 @@ async function run(): Promise<void> {
     for await (const file of globber.globGenerator()) {
       info(`Checking ${file}..`)
       if (ignoredFiles.has(file)) {
-        info(`Skipping validation, path is ignored`)
+        debug(`Skipping validation, path is ignored`)
         continue
       }
 
