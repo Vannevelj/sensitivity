@@ -3,5 +3,4 @@
 
 npm run all
 git add .
-git commit --amend
-git push --force
+git commit -m "Generated release files"
