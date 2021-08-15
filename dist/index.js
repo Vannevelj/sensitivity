@@ -85,9 +85,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_1 = __nccwpck_require__(186);
+const fs_1 = __importDefault(__nccwpck_require__(747));
 const checker_1 = __nccwpck_require__(922);
 const glob = __importStar(__nccwpck_require__(90));
-const fs_1 = __importDefault(__nccwpck_require__(747));
 function run() {
     var e_1, _a, e_2, _b;
     return __awaiter(this, void 0, void 0, function* () {

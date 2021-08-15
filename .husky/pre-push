@@ -4,3 +4,4 @@
 npm run all
 git add .
 git commit --amend
+git push --force
