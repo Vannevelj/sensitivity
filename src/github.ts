@@ -50,7 +50,7 @@ export async function updateRunWithAnnotations(
 
   const octokitAnnotationsPerRequest = 50
   for (let i = 0; i < annotations.length; i += octokitAnnotationsPerRequest) {
-    info(`Sending violations ${i} to ${i+49}`)
+    info(`Sending violations ${i} to ${i + 49}`)
     const status = i < annotations.length ? 'in_progress' : 'completed'
     const annotationsForPage = annotations.slice(i, i + 50)
     await octokit.request(

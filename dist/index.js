@@ -61,6 +61,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.updateRunWithAnnotations = exports.createCheck = void 0;
 const github_1 = __nccwpck_require__(5438);
+const core_1 = __nccwpck_require__(2186);
 const checkName = 'Some test name';
 function createCheck(token) {
     var _a, _b;
@@ -73,6 +74,7 @@ function createCheck(token) {
             head_sha: (_b = (_a = github_1.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.head.sha) !== null && _b !== void 0 ? _b : github_1.context.sha,
             name: checkName
         });
+        core_1.info(`Created check with ID ${response.data.id}`);
         return response;
     });
 }
@@ -80,6 +82,7 @@ exports.createCheck = createCheck;
 function updateRunWithAnnotations(token, checkRunId, annotations) {
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = github_1.getOctokit(token);
+        core_1.info(`Found ${annotations.length} violations.`);
         if (annotations.length === 0) {
             yield octokit.request(`PATCH /repos/${github_1.context.repo.owner}/${github_1.context.repo.repo}/check-runs/${checkRunId}`, {
                 owner: github_1.context.repo.owner,
@@ -89,9 +92,11 @@ function updateRunWithAnnotations(token, checkRunId, annotations) {
                 status: 'completed',
                 conclusion: 'success'
             });
+            return;
         }
         const octokitAnnotationsPerRequest = 50;
         for (let i = 0; i < annotations.length; i += octokitAnnotationsPerRequest) {
+            core_1.info(`Sending violations ${i} to ${i + 49}`);
             const status = i < annotations.length ? 'in_progress' : 'completed';
             const annotationsForPage = annotations.slice(i, i + 50);
             yield octokit.request(`PATCH /repos/${github_1.context.repo.owner}/${github_1.context.repo.repo}/check-runs/${checkRunId}`, {
