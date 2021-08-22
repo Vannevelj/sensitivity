@@ -112,7 +112,7 @@ function updateRunWithAnnotations(token, checkRunId, annotations) {
                     text: `Found violations in the following files: \n* ${annotations
                         .map(v => v.path)
                         .join('\n* ')}`,
-                    annotationsForPage
+                    annotations: annotationsForPage
                 }
             });
             core_1.info(`Response: ${JSON.stringify(response)}`);
