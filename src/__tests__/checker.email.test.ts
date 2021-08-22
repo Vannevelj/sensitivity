@@ -3,7 +3,8 @@ import { check } from '../checker'
 import { setFailed } from '@actions/core'
 
 jest.mock('@actions/core', () => ({
-  setFailed: jest.fn()
+  setFailed: jest.fn(),
+  error: jest.fn()
 }))
 
 describe('email address', () => {
@@ -17,7 +18,7 @@ describe('email address', () => {
       'wowee@hello.co.uk',
       "O'Connor@example.com"
     ])('%s', (email: string) => {
-      check(email)
+      check(email, '')
       expect(setFailed).toHaveBeenCalled()
     })
   })
@@ -26,7 +27,7 @@ describe('email address', () => {
     test.each(['fold@home', 'test.me', '@@@', '...', '', ' ', '@me'])(
       '%s',
       (email: string) => {
-        check(email)
+        check(email, '')
         expect(setFailed).not.toHaveBeenCalled()
       }
     )

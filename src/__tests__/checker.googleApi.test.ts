@@ -3,7 +3,8 @@ import { check } from '../checker'
 import { setFailed } from '@actions/core'
 
 jest.mock('@actions/core', () => ({
-  setFailed: jest.fn()
+  setFailed: jest.fn(),
+  error: jest.fn()
 }))
 
 describe('Google API key', () => {
@@ -15,7 +16,7 @@ describe('Google API key', () => {
       "'AIzaSyBdJ88HN7LTGkHHK5whfaVv8a5ozlx2E_k'",
       'AIzaSyBdJ88HN7LTGkHHK5whfaVv8a5ozlx2E_ky'
     ])('%s', (key: string) => {
-      check(key)
+      check(key, '')
       expect(setFailed).toHaveBeenCalled()
     })
   })
@@ -26,7 +27,7 @@ describe('Google API key', () => {
       'AIzaSyBdJ88HN7LTGkHHK5whfaVv8a5ozlx2Ek',
       'AizaSyBdJ88HN7LTGkHHK5whfaVv8a5ozlx2E_k'
     ])('%s', (key: string) => {
-      check(key)
+      check(key, '')
       expect(setFailed).not.toHaveBeenCalled()
     })
   })

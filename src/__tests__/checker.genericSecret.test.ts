@@ -3,7 +3,8 @@ import { check } from '../checker'
 import { setFailed } from '@actions/core'
 
 jest.mock('@actions/core', () => ({
-  setFailed: jest.fn()
+  setFailed: jest.fn(),
+  error: jest.fn()
 }))
 
 describe('generic secrets', () => {
@@ -30,7 +31,7 @@ describe('generic secrets', () => {
       'secret: ""',
       'const apiKey = 5'
     ])('%s', (key: string) => {
-      check(key)
+      check(key, '')
       expect(setFailed).toHaveBeenCalled()
     })
   })
@@ -50,7 +51,7 @@ describe('generic secrets', () => {
       'if the apiKey is undefined',
       '<Component key=5>'
     ])('%s', (key: string) => {
-      check(key)
+      check(key, '')
       expect(setFailed).not.toHaveBeenCalled()
     })
   })

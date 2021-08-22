@@ -3,7 +3,8 @@ import { check } from '../checker'
 import { setFailed } from '@actions/core'
 
 jest.mock('@actions/core', () => ({
-  setFailed: jest.fn()
+  setFailed: jest.fn(),
+  error: jest.fn()
 }))
 
 describe('AWS_ACCESS_KEY_ID', () => {
@@ -15,7 +16,7 @@ describe('AWS_ACCESS_KEY_ID', () => {
       "'AKIAIOSFODNN7EXAMPLE'",
       'AKIAIOSFODNN7EXAMPLEERRRR'
     ])('%s', (key: string) => {
-      check(key)
+      check(key, '')
       expect(setFailed).toHaveBeenCalled()
     })
   })
@@ -28,7 +29,7 @@ describe('AWS_ACCESS_KEY_ID', () => {
       '',
       'AKIAIOSFODNN7'
     ])('%s', (key: string) => {
-      check(key)
+      check(key, '')
       expect(setFailed).not.toHaveBeenCalled()
     })
   })
