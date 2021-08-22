@@ -1,8 +1,9 @@
-import { setFailed } from '@actions/core'
+import { setFailed, error } from '@actions/core'
 
-export async function check(content: string) {
+export async function check(content: string, file: string) {
   for (const regex of regexes) {
     if (regex.test(content)) {
+      error(`::error file=${file},line=1,col=5::Missing semicolon`)
       setFailed('Sensitive data found!')
     }
   }

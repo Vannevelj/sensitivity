@@ -35,7 +35,7 @@ async function run(): Promise<void> {
 
       const buffer = await fs.promises.readFile(file)
       const content = buffer.toString()
-      await check(content)
+      await check(content, file)
     }
   } catch (error) {
     setFailed(error.message)

@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: Vannevelj/sensitivity@v1.1
+      - uses: Vannevelj/sensitivity@v1.2
         with:
           path: src
           ignorePaths: '["src/__tests__/checker.*.test.ts"]'
