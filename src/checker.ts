@@ -22,7 +22,8 @@ export function check(
           message: `The following line breaks the rules:\n${line}`,
           title: `A violation of type '${type}' has been found`,
           start_column: 1,
-          end_column: 1
+          end_column: 1,
+          type
         })
       }
     }
@@ -58,4 +59,5 @@ export interface Annotation {
   annotation_level: 'failure' | 'warning' | 'notice'
   title: string
   message: string
+  type: string
 }
