@@ -65,7 +65,9 @@ export async function updateRunWithAnnotations(
         output: {
           title: `Sensitivity check results`,
           summary: `${annotations.length} have been found`,
-          text: `Found violations in the following files: \n* ${annotations.map(v => v.path).join('\n* ')}`,
+          text: `Found violations in the following files: \n* ${annotations
+            .map(v => v.path)
+            .join('\n* ')}`,
           annotationsForPage
         }
       }

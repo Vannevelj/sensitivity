@@ -108,8 +108,8 @@ function updateRunWithAnnotations(token, checkRunId, annotations) {
                 conclusion: 'failure',
                 output: {
                     title: `Sensitivity check results`,
-                    summary: `A little summary`,
-                    text: `Some text`,
+                    summary: `${annotations.length} have been found`,
+                    text: `Found violations in the following files: \n* ${annotations.map(v => v.path).join('\n* ')}`,
                     annotationsForPage
                 }
             });
