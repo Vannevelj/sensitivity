@@ -5,6 +5,9 @@ inputs:
   path:
     required: true
     description: 'The path to your root folder, e.g. src'
+  token:
+    required: true
+    description: 'Github authentication token, i.e. ${{ secrets.GITHUB_TOKEN }}'
   ignorePaths:
     required: false
     description: 'Optional: globs that will be ignored'

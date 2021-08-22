@@ -1,6 +1,5 @@
 import { expect, describe, test } from '@jest/globals'
 import { check } from '../checker'
-import { setFailed } from '@actions/core'
 
 jest.mock('@actions/core', () => ({
   setFailed: jest.fn(),
@@ -31,8 +30,8 @@ describe('generic secrets', () => {
       'secret: ""',
       'const apiKey = 5'
     ])('%s', (key: string) => {
-      check(key, '')
-      expect(setFailed).toHaveBeenCalled()
+      const annotations = check(key, '', '')
+      expect(annotations).toHaveLength(1)
     })
   })
 
@@ -51,8 +50,8 @@ describe('generic secrets', () => {
       'if the apiKey is undefined',
       '<Component key=5>'
     ])('%s', (key: string) => {
-      check(key, '')
-      expect(setFailed).not.toHaveBeenCalled()
+      const annotations = check(key, '', '')
+      expect(annotations).toHaveLength(0)
     })
   })
 })

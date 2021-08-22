@@ -16,3 +16,4 @@ jobs:
       - uses: ./
         with:
           path: src
+          token: ${{ secrets.GITHUB_TOKEN }}
