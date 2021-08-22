@@ -1,4 +1,4 @@
-import { error } from "console"
+import { error } from 'console'
 
 export function check(
   content: string,

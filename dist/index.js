@@ -2,12 +2,13 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 922:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.check = void 0;
+const console_1 = __nccwpck_require__(7082);
 function check(content, file, repo) {
     let lineIndex = 0;
     const annotations = [];
@@ -27,6 +28,7 @@ function check(content, file, repo) {
                     end_column: 1,
                     type
                 });
+                console_1.error(`Violation found: ${type}`);
             }
         }
     }
@@ -253,19 +255,19 @@ function run() {
                     if (!(yield fs_1.default.promises.lstat(file)).isFile()) {
                         continue;
                     }
-                    core_1.info(`Checking ${file}`);
                     if (ignoredFiles.has(file)) {
-                        core_1.debug(`Skipping validation, path is ignored`);
+                        core_1.debug(`${file}: Skipping validation, path is ignored`);
                         continue;
                     }
                     if (ignoredDirectories.some(ext => file.indexOf(ext) >= 0)) {
-                        core_1.debug(`Skipping validation, ignored directory`);
+                        core_1.debug(`${file}: Skipping validation, ignored directory`);
                         continue;
                     }
                     if (ignoredFileExtensions.some(ext => file.endsWith(ext))) {
-                        core_1.debug(`Skipping validation, ignored filetype`);
+                        core_1.debug(`${file}: Skipping validation, ignored filetype`);
                         continue;
                     }
+                    core_1.info(`Checking ${file}`);
                     const buffer = yield fs_1.default.promises.readFile(file);
                     const content = buffer.toString();
                     const fileAnnotations = checker_1.check(content, file, 'sensitivity');
@@ -8882,6 +8884,14 @@ module.exports = eval("require")("encoding");
 
 "use strict";
 module.exports = require("assert");
+
+/***/ }),
+
+/***/ 7082:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("console");
 
 /***/ }),
 

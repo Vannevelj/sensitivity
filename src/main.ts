@@ -41,7 +41,7 @@ async function run(): Promise<void> {
       if (!(await fs.promises.lstat(file)).isFile()) {
         continue
       }
-      
+
       if (ignoredFiles.has(file)) {
         debug(`${file}: Skipping validation, path is ignored`)
         continue
