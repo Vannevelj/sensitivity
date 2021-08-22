@@ -18,10 +18,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.check = void 0;
 const core_1 = __nccwpck_require__(186);
-function check(content) {
+function check(content, file) {
     return __awaiter(this, void 0, void 0, function* () {
         for (const regex of regexes) {
             if (regex.test(content)) {
+                core_1.error(`::error file=${file},line=1,col=5::Missing semicolon`);
                 core_1.setFailed('Sensitive data found!');
             }
         }
@@ -130,7 +131,7 @@ function run() {
                     }
                     const buffer = yield fs_1.default.promises.readFile(file);
                     const content = buffer.toString();
-                    yield checker_1.check(content);
+                    yield checker_1.check(content, file);
                 }
             }
             catch (e_2_1) { e_2 = { error: e_2_1 }; }
