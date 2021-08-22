@@ -8,7 +8,9 @@ async function run(): Promise<void> {
     info('Starting sensitivity check..')
     const path = getInput('path', { required: true })
     const ignoredPathsRaw = getInput('ignorePaths', { required: false })
-    const ignoredPathsArray = JSON.parse(ignoredPathsRaw) as string[]
+    const ignoredPathsArray = ignoredPathsRaw
+      ? (JSON.parse(ignoredPathsRaw) as string[])
+      : []
     const ignoredFiles: Set<string> = new Set()
 
     for (const ignoredPath of ignoredPathsArray) {
