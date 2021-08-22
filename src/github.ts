@@ -54,6 +54,14 @@ export async function updateRunWithAnnotations(
   }
 
   const violatingFiles = Array.from(new Set(annotations.map(v => v.path)))
+  const violationsPerType = new Map<string, number>()
+  annotations.forEach(ann => {
+    if (violationsPerType.has(ann.type)) {
+      violationsPerType.set(ann.type, violationsPerType.get(ann.type)! + 1)
+    } else {
+      violationsPerType.set(ann.type, 1)
+    }
+  })
 
   const octokitAnnotationsPerRequest = 50
   for (let i = 0; i < annotations.length; i += octokitAnnotationsPerRequest) {
@@ -73,9 +81,13 @@ export async function updateRunWithAnnotations(
           output: {
             title: `Sensitivity check results`,
             summary: `${annotations.length} violations have been found`,
-            text: `Found violations in the following files: \n* ${violatingFiles.join(
-              '\n* '
-            )}`,
+            text: `Summary of violations by type: \n* ${Array.from(
+              violationsPerType
+            )
+              .map(v => `${v[0]}: ${v[1]}`)
+              .join('\n* ')}
+
+Found violations in the following files: \n* ${violatingFiles.join('\n* ')}`,
             annotations: annotationsForPage
           }
         }
