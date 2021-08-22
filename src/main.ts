@@ -23,6 +23,8 @@ async function run(): Promise<void> {
       }
     }
 
+    const ignoredFileExtensions = ['.png', '.mp4', '.dll', '.jpg', '.exe',]
+    const ignoredDirectories = ['node_modules', '.git', '.nuget']
     const annotations: Annotation[] = []
     const globber = await glob.create(`${path}/**/*.*`)
     for await (const file of globber.globGenerator()) {
@@ -30,9 +32,19 @@ async function run(): Promise<void> {
         continue
       }
 
-      info(`Checking ${file}..`)
+      info(`Checking ${file}`)
       if (ignoredFiles.has(file)) {
         debug(`Skipping validation, path is ignored`)
+        continue
+      }
+
+      if (ignoredDirectories.some(ext => file.endsWith(ext))) {
+        debug(`Skipping validation, ignored directory`)
+        continue
+      }
+
+      if (ignoredFileExtensions.some(ext => file.endsWith(ext))) {
+        debug(`Skipping validation, ignored filetype`)
         continue
       }
 
