@@ -68,7 +68,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.updateRunWithAnnotations = exports.createCheck = void 0;
 const github_1 = __nccwpck_require__(5438);
 const core_1 = __nccwpck_require__(2186);
-const checkName = 'Some test name';
+const checkName = 'Sensitivity Check Results';
 function createCheck(token) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
