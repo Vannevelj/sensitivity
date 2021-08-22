@@ -30,6 +30,7 @@ See it on the Marketplace: https://github.com/marketplace/actions/sensitive-data
 | Parameter  | Required  | Description  |
 |---|---|---|
 | path  | Yes  | The path to your root folder, e.g. src  |
+| token | Yes | Github authentication token, i.e. ${{ secrets.GITHUB_TOKEN }} |
 | ignorePaths  | No  | Array of globs for paths that will be ignored  |
 
 ## Contributing
