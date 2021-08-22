@@ -81,21 +81,21 @@ export async function updateRunWithAnnotations(
           output: {
             title: `Sensitivity check results`,
             summary: `${annotations.length} violations have been found`,
-            text: `Summary of violations by type: \n* ${Array.from(violationsPerType).map(v => `${v[0]}: ${v[1]}`).join(
-              '\n* '
-            )}
+            text: `Summary of violations by type: \n* ${Array.from(
+              violationsPerType
+            )
+              .map(v => `${v[0]}: ${v[1]}`)
+              .join('\n* ')}
 
-            Found violations in the following files: \n* ${
-              violatingFiles.join(
-                '\n* '
-              )
-            }`,
+            Found violations in the following files: \n* ${violatingFiles.join(
+              '\n* '
+            )}`,
             annotations: annotationsForPage
           }
         }
       )
     } catch (err) {
-      error(`Unable to update check with annotations: ${ err }`)
+      error(`Unable to update check with annotations: ${err}`)
     }
   }
 }
