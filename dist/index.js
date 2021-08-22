@@ -232,9 +232,9 @@ function run() {
                 }
                 finally { if (e_2) throw e_2.error; }
             }
+            const checkResponse = yield github_1.createCheck(token);
+            yield github_1.updateRunWithAnnotations(token, checkResponse.data.id, annotations);
             if (annotations.length > 0) {
-                const checkResponse = yield github_1.createCheck(token);
-                yield github_1.updateRunWithAnnotations(token, checkResponse.data.id, annotations);
                 core_1.setFailed('Sensitive data found!');
             }
         }
