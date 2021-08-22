@@ -5,7 +5,7 @@ export function check(
 ): Annotation[] {
   let lineIndex = 0
   const annotations: Annotation[] = []
-  for (const line of content.split('\r\n')) {
+  for (const line of content.split('\n')) {
     lineIndex++
     for (const { type, regex } of regexes) {
       if (regex.test(line)) {
