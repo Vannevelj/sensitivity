@@ -38,7 +38,7 @@ async function run(): Promise<void> {
         continue
       }
 
-      if (ignoredDirectories.some(ext => file.endsWith(ext))) {
+      if (ignoredDirectories.some(ext => file.indexOf(ext) >= 0)) {
         debug(`Skipping validation, ignored directory`)
         continue
       }
