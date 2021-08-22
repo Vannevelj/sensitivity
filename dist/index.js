@@ -216,7 +216,7 @@ function run() {
                     finally { if (e_1) throw e_1.error; }
                 }
             }
-            const ignoredFileExtensions = ['.png', '.mp4', '.dll', '.jpg', '.exe',];
+            const ignoredFileExtensions = ['.png', '.mp4', '.dll', '.jpg', '.exe'];
             const ignoredDirectories = ['node_modules', '.git', '.nuget'];
             const annotations = [];
             const globber = yield glob.create(`${path}/**/*.*`);
@@ -231,7 +231,7 @@ function run() {
                         core_1.debug(`Skipping validation, path is ignored`);
                         continue;
                     }
-                    if (ignoredDirectories.some(ext => file.endsWith(ext))) {
+                    if (ignoredDirectories.some(ext => file.indexOf(ext) >= 0)) {
                         core_1.debug(`Skipping validation, ignored directory`);
                         continue;
                     }
