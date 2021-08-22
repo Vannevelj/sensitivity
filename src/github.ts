@@ -42,7 +42,12 @@ export async function updateRunWithAnnotations(
         check_run_id: checkRunId,
         name: checkName,
         status: 'completed',
-        conclusion: 'success'
+        conclusion: 'success',
+        output: {
+          title: `Sensitivity check results`,
+          summary: `${annotations.length} violations have been found`,
+          text: `No violations were found in the included files.`
+        }
       }
     )
     return
