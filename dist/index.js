@@ -8,7 +8,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.check = void 0;
-const console_1 = __nccwpck_require__(7082);
+const core_1 = __nccwpck_require__(2186);
 function check(content, file, repo) {
     let lineIndex = 0;
     const annotations = [];
@@ -28,7 +28,7 @@ function check(content, file, repo) {
                     end_column: 1,
                     type
                 });
-                console_1.error(`Violation found: ${type}`);
+                core_1.error(`Violation found: ${type}`);
             }
         }
     }
@@ -240,11 +240,18 @@ function run() {
                 '.mp4',
                 '.dll',
                 '.jpg',
+                '.jpeg',
                 '.exe',
                 '.ttf',
                 '.woff',
                 '.css',
-                '.scss'
+                '.scss',
+                '.otf',
+                '.gif',
+                '.svg',
+                '.war',
+                '.jar',
+                '.ico'
             ];
             const ignoredDirectories = ['/node_modules/', '/.git/', '/.nuget/', '/lib/'];
             const annotations = [];
@@ -8884,14 +8891,6 @@ module.exports = eval("require")("encoding");
 
 "use strict";
 module.exports = require("assert");
-
-/***/ }),
-
-/***/ 7082:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("console");
 
 /***/ }),
 
