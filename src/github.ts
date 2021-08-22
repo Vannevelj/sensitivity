@@ -50,10 +50,10 @@ export async function updateRunWithAnnotations(
 
   const octokitAnnotationsPerRequest = 50
   for (let i = 0; i < annotations.length; i += octokitAnnotationsPerRequest) {
-    info(`Sending violations ${i} to ${i + 49}`)
+    info(`Sending violations ${i} to ${Math.min(i + 49, annotations.length)}`)
     const status = i < annotations.length ? 'in_progress' : 'completed'
     const annotationsForPage = annotations.slice(i, i + 50)
-    await octokit.request(
+    const response = await octokit.request(
       `PATCH /repos/${context.repo.owner}/${context.repo.repo}/check-runs/${checkRunId}`,
       {
         owner: context.repo.owner,
@@ -64,7 +64,7 @@ export async function updateRunWithAnnotations(
         conclusion: 'failure',
         output: {
           title: `Sensitivity check results`,
-          summary: `${annotations.length} have been found`,
+          summary: `${annotations.length} violations have been found`,
           text: `Found violations in the following files: \n* ${annotations
             .map(v => v.path)
             .join('\n* ')}`,
@@ -72,5 +72,6 @@ export async function updateRunWithAnnotations(
         }
       }
     )
+    info(`Response: ${JSON.stringify(response)}`)
   }
 }
