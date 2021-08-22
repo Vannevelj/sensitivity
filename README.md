@@ -9,7 +9,7 @@ name: 'Check for sensitive data'
 on: pull_request
 
 jobs:
-  test:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,6 +17,7 @@ jobs:
         with:
           path: src
           ignorePaths: '["src/__tests__/checker.*.test.ts"]'
+
 ```
 
 See it on the Marketplace: https://github.com/marketplace/actions/sensitive-data-check
