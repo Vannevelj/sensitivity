@@ -95,7 +95,9 @@ function run() {
             core_1.info('Starting sensitivity check..');
             const path = core_1.getInput('path', { required: true });
             const ignoredPathsRaw = core_1.getInput('ignorePaths', { required: false });
-            const ignoredPathsArray = JSON.parse(ignoredPathsRaw);
+            const ignoredPathsArray = ignoredPathsRaw
+                ? JSON.parse(ignoredPathsRaw)
+                : [];
             const ignoredFiles = new Set();
             for (const ignoredPath of ignoredPathsArray) {
                 core_1.debug(`Found ignored path: ${ignoredPath}`);
