@@ -23,7 +23,7 @@ async function run(): Promise<void> {
       }
     }
 
-    const ignoredFileExtensions = ['.png', '.mp4', '.dll', '.jpg', '.exe']
+    const ignoredFileExtensions = ['.png', '.mp4', '.dll', '.jpg', '.exe', '.ttf', '.woff', '.css']
     const ignoredDirectories = ['node_modules', '.git', '.nuget']
     const annotations: Annotation[] = []
     const globber = await glob.create(`${path}/**/*.*`)
