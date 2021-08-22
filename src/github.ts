@@ -1,6 +1,7 @@
 import { Annotation } from './checker'
 import { getOctokit, context } from '@actions/github'
 import { RestEndpointMethodTypes } from '@octokit/rest'
+import { info } from '@actions/core'
 
 type ChecksCreateResponse = RestEndpointMethodTypes['checks']['create']['response']
 const checkName = 'Some test name'
@@ -18,6 +19,8 @@ export async function createCheck(
     name: checkName
   })
 
+  info(`Created check with ID ${response.data.id}`)
+
   return response
 }
 
@@ -27,6 +30,8 @@ export async function updateRunWithAnnotations(
   annotations: Annotation[]
 ) {
   const octokit = getOctokit(token)
+
+  info(`Found ${annotations.length} violations.`)
 
   if (annotations.length === 0) {
     await octokit.request(
@@ -40,10 +45,12 @@ export async function updateRunWithAnnotations(
         conclusion: 'success'
       }
     )
+    return
   }
 
   const octokitAnnotationsPerRequest = 50
   for (let i = 0; i < annotations.length; i += octokitAnnotationsPerRequest) {
+    info(`Sending violations ${i} to ${i+49}`)
     const status = i < annotations.length ? 'in_progress' : 'completed'
     const annotationsForPage = annotations.slice(i, i + 50)
     await octokit.request(
