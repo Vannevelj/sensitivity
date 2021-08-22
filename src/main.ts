@@ -42,9 +42,10 @@ async function run(): Promise<void> {
       annotations.push(...fileAnnotations)
     }
 
+    const checkResponse = await createCheck(token)
+    await updateRunWithAnnotations(token, checkResponse.data.id, annotations)
+
     if (annotations.length > 0) {
-      const checkResponse = await createCheck(token)
-      await updateRunWithAnnotations(token, checkResponse.data.id, annotations)
       setFailed('Sensitive data found!')
     }
   } catch (error) {
