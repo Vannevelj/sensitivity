@@ -1,3 +1,5 @@
+import { error } from "console"
+
 export function check(
   content: string,
   file: string,
@@ -25,6 +27,8 @@ export function check(
           end_column: 1,
           type
         })
+
+        error(`Violation found: ${type}`)
       }
     }
   }

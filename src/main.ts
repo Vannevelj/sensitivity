@@ -41,23 +41,23 @@ async function run(): Promise<void> {
       if (!(await fs.promises.lstat(file)).isFile()) {
         continue
       }
-
-      info(`Checking ${file}`)
+      
       if (ignoredFiles.has(file)) {
-        debug(`Skipping validation, path is ignored`)
+        debug(`${file}: Skipping validation, path is ignored`)
         continue
       }
 
       if (ignoredDirectories.some(ext => file.indexOf(ext) >= 0)) {
-        debug(`Skipping validation, ignored directory`)
+        debug(`${file}: Skipping validation, ignored directory`)
         continue
       }
 
       if (ignoredFileExtensions.some(ext => file.endsWith(ext))) {
-        debug(`Skipping validation, ignored filetype`)
+        debug(`${file}: Skipping validation, ignored filetype`)
         continue
       }
 
+      info(`Checking ${file}`)
       const buffer = await fs.promises.readFile(file)
       const content = buffer.toString()
       const fileAnnotations = check(content, file, 'sensitivity')
