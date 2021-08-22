@@ -111,20 +111,25 @@ function updateRunWithAnnotations(token, checkRunId, annotations) {
             core_1.info(`Sending violations ${i} to ${Math.min(i + 49, annotations.length)}`);
             const status = i < annotations.length ? 'in_progress' : 'completed';
             const annotationsForPage = annotations.slice(i, i + 50);
-            yield octokit.request(`PATCH /repos/${github_1.context.repo.owner}/${github_1.context.repo.repo}/check-runs/${checkRunId}`, {
-                owner: github_1.context.repo.owner,
-                repo: github_1.context.repo.repo,
-                check_run_id: checkRunId,
-                name: checkName,
-                status,
-                conclusion: 'failure',
-                output: {
-                    title: `Sensitivity check results`,
-                    summary: `${annotations.length} violations have been found`,
-                    text: `Found violations in the following files: \n* ${violatingFiles.join('\n* ')}`,
-                    annotations: annotationsForPage
-                }
-            });
+            try {
+                yield octokit.request(`PATCH /repos/${github_1.context.repo.owner}/${github_1.context.repo.repo}/check-runs/${checkRunId}`, {
+                    owner: github_1.context.repo.owner,
+                    repo: github_1.context.repo.repo,
+                    check_run_id: checkRunId,
+                    name: checkName,
+                    status,
+                    conclusion: 'failure',
+                    output: {
+                        title: `Sensitivity check results`,
+                        summary: `${annotations.length} violations have been found`,
+                        text: `Found violations in the following files: \n* ${violatingFiles.join('\n* ')}`,
+                        annotations: annotationsForPage
+                    }
+                });
+            }
+            catch (err) {
+                core_1.error(`Unable to update check with annotations: ${err}`);
+            }
         }
     });
 }
@@ -211,6 +216,8 @@ function run() {
                     finally { if (e_1) throw e_1.error; }
                 }
             }
+            const ignoredFileExtensions = ['.png', '.mp4', '.dll', '.jpg', '.exe',];
+            const ignoredDirectories = ['node_modules', '.git', '.nuget'];
             const annotations = [];
             const globber = yield glob.create(`${path}/**/*.*`);
             try {
@@ -219,9 +226,17 @@ function run() {
                     if (!(yield fs_1.default.promises.lstat(file)).isFile()) {
                         continue;
                     }
-                    core_1.info(`Checking ${file}..`);
+                    core_1.info(`Checking ${file}`);
                     if (ignoredFiles.has(file)) {
                         core_1.debug(`Skipping validation, path is ignored`);
+                        continue;
+                    }
+                    if (ignoredDirectories.some(ext => file.endsWith(ext))) {
+                        core_1.debug(`Skipping validation, ignored directory`);
+                        continue;
+                    }
+                    if (ignoredFileExtensions.some(ext => file.endsWith(ext))) {
+                        core_1.debug(`Skipping validation, ignored filetype`);
                         continue;
                     }
                     const buffer = yield fs_1.default.promises.readFile(file);
