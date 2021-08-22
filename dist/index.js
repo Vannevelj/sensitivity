@@ -43,7 +43,7 @@ const regexes = [
     { type: 'Google API key', regex: /AIza[0-9A-Za-z_]{35}/ },
     {
         type: 'Generic secret',
-        regex: /\b(?:api[_-]?key|secret|(?:access|api)?[_-]?token)\s?[:=]/i
+        regex: /\b(?:api[_-]?key|secret|(?:access|api)?[_-]?token)\s?[:=]\s?["'][a-z0-9]*['"]/i
     }
 ].map(r => ({ type: r.type, regex: new RegExp(r.regex) }));
 

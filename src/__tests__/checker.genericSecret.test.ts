@@ -55,7 +55,7 @@ describe('generic secrets', () => {
       'const apiKey = 5',
       'token: string,',
       'const apiKey = `Test-${getIt(5)}`',
-      'var token = "AKIA{getRest()}"',
+      'var token = "AKIA{getRest()}"'
     ])('%s', (key: string) => {
       const annotations = check(key, '', '')
       expect(annotations).toHaveLength(0)
