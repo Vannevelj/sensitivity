@@ -1,7 +1,7 @@
 import { Annotation } from './checker'
 import { getOctokit, context } from '@actions/github'
 import { RestEndpointMethodTypes } from '@octokit/rest'
-import { info } from '@actions/core'
+import { info, error } from '@actions/core'
 
 type ChecksCreateResponse = RestEndpointMethodTypes['checks']['create']['response']
 const checkName = 'Sensitivity Check Results'
@@ -60,24 +60,28 @@ export async function updateRunWithAnnotations(
     info(`Sending violations ${i} to ${Math.min(i + 49, annotations.length)}`)
     const status = i < annotations.length ? 'in_progress' : 'completed'
     const annotationsForPage = annotations.slice(i, i + 50)
-    await octokit.request(
-      `PATCH /repos/${context.repo.owner}/${context.repo.repo}/check-runs/${checkRunId}`,
-      {
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        check_run_id: checkRunId,
-        name: checkName,
-        status,
-        conclusion: 'failure',
-        output: {
-          title: `Sensitivity check results`,
-          summary: `${annotations.length} violations have been found`,
-          text: `Found violations in the following files: \n* ${violatingFiles.join(
-            '\n* '
-          )}`,
-          annotations: annotationsForPage
+    try {
+      await octokit.request(
+        `PATCH /repos/${context.repo.owner}/${context.repo.repo}/check-runs/${checkRunId}`,
+        {
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          check_run_id: checkRunId,
+          name: checkName,
+          status,
+          conclusion: 'failure',
+          output: {
+            title: `Sensitivity check results`,
+            summary: `${annotations.length} violations have been found`,
+            text: `Found violations in the following files: \n* ${violatingFiles.join(
+              '\n* '
+            )}`,
+            annotations: annotationsForPage
+          }
         }
-      }
-    )
+      )
+    } catch (err) {
+      error(`Unable to update check with annotations: ${err}`)
+    }
   }
 }
