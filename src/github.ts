@@ -72,6 +72,5 @@ export async function updateRunWithAnnotations(
         }
       }
     )
-    info(`Response: ${JSON.stringify(response)}`)
   }
 }
