@@ -1,6 +1,6 @@
 {
   "name": "sensitivity",
-  "version": "1.2",
+  "version": "1.7",
   "private": true,
   "description": "A Github Action that detects sensitive information in your code",
   "main": "lib/main.js",

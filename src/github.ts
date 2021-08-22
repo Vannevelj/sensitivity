@@ -87,9 +87,7 @@ export async function updateRunWithAnnotations(
               .map(v => `${v[0]}: ${v[1]}`)
               .join('\n* ')}
 
-Found violations in the following files: \n* ${violatingFiles.join(
-              '\n* '
-            )}`,
+Found violations in the following files: \n* ${violatingFiles.join('\n* ')}`,
             annotations: annotationsForPage
           }
         }
