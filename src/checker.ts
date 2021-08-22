@@ -32,7 +32,10 @@ export function check(
 }
 
 const regexes = [
-  { type: 'email', regex: /[a-z0-9_.]+@[a-z]+(?:\.(?:com|co\.uk|org|be|net|in|ru|de|nl|fr|es|pt|br|ir|au|tk|cn|info))/i },
+  {
+    type: 'email',
+    regex: /[a-z0-9_.]+@[a-z]+(?:\.(?:com|co\.uk|org|be|net|in|ru|de|nl|fr|es|pt|br|ir|au|tk|cn|info))/i
+  },
   { type: 'ssh', regex: /-----BEGIN[A-Z\s+]*PRIVATE KEY(?:\sBLOCK)?-----/ },
   { type: 'AWS_ACCESS_KEY_ID', regex: /AKIA[A-Z0-9]{16}/ },
   {

@@ -33,7 +33,7 @@ function check(content, file, repo) {
 }
 exports.check = check;
 const regexes = [
-    { type: 'email', regex: /[a-z0-9_.]*@[a-z].[a-z]*(?:\.[a-z]*)/i },
+    { type: 'email', regex: /[a-z0-9_.]+@[a-z]+(?:\.(?:com|co\.uk|org|be|net|in|ru|de|nl|fr|es|pt|br|ir|au|tk|cn|info))/i },
     { type: 'ssh', regex: /-----BEGIN[A-Z\s+]*PRIVATE KEY(?:\sBLOCK)?-----/ },
     { type: 'AWS_ACCESS_KEY_ID', regex: /AKIA[A-Z0-9]{16}/ },
     {
@@ -216,7 +216,7 @@ function run() {
                     finally { if (e_1) throw e_1.error; }
                 }
             }
-            const ignoredFileExtensions = ['.png', '.mp4', '.dll', '.jpg', '.exe'];
+            const ignoredFileExtensions = ['.png', '.mp4', '.dll', '.jpg', '.exe', '.ttf', '.woff', '.css'];
             const ignoredDirectories = ['node_modules', '.git', '.nuget'];
             const annotations = [];
             const globber = yield glob.create(`${path}/**/*.*`);
