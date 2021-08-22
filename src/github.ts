@@ -68,7 +68,7 @@ export async function updateRunWithAnnotations(
           text: `Found violations in the following files: \n* ${annotations
             .map(v => v.path)
             .join('\n* ')}`,
-          annotationsForPage
+          annotations: annotationsForPage
         }
       }
     )
