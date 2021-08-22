@@ -61,27 +61,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.updateRunWithAnnotations = exports.createCheck = void 0;
 const github_1 = __nccwpck_require__(5438);
-function createCheck(token, owner, repo) {
+const checkName = 'Some test name';
+function createCheck(token) {
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = github_1.getOctokit(token);
         const response = yield octokit.rest.checks.create({
-            owner,
-            repo,
-            status: 'in_progress'
+            owner: github_1.context.repo.owner,
+            repo: github_1.context.repo.repo,
+            status: 'in_progress',
+            head_sha: (_b = (_a = github_1.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.head.sha) !== null && _b !== void 0 ? _b : github_1.context.sha,
+            name: checkName
         });
         return response;
     });
 }
 exports.createCheck = createCheck;
-function updateRunWithAnnotations(token, checkRunId, owner, repo, annotations) {
+function updateRunWithAnnotations(token, checkRunId, annotations) {
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = github_1.getOctokit(token);
         if (annotations.length === 0) {
-            yield octokit.request(`PATCH /repos/${owner}/${repo}/check-runs/${checkRunId}`, {
-                owner,
-                repo,
+            yield octokit.request(`PATCH /repos/${github_1.context.repo.owner}/${github_1.context.repo.repo}/check-runs/${checkRunId}`, {
+                owner: github_1.context.repo.owner,
+                repo: github_1.context.repo.repo,
                 check_run_id: checkRunId,
-                name: 'some test name',
+                name: checkName,
                 status: 'completed',
                 conclusion: 'success'
             });
@@ -90,11 +94,11 @@ function updateRunWithAnnotations(token, checkRunId, owner, repo, annotations) {
         for (let i = 0; i < annotations.length; i += octokitAnnotationsPerRequest) {
             const status = i < annotations.length ? 'in_progress' : 'completed';
             const annotationsForPage = annotations.slice(i, i + 50);
-            yield octokit.request(`PATCH /repos/${owner}/${repo}/check-runs/${checkRunId}`, {
-                owner,
-                repo,
+            yield octokit.request(`PATCH /repos/${github_1.context.repo.owner}/${github_1.context.repo.repo}/check-runs/${checkRunId}`, {
+                owner: github_1.context.repo.owner,
+                repo: github_1.context.repo.repo,
                 check_run_id: checkRunId,
-                name: 'some test name',
+                name: checkName,
                 status,
                 conclusion: 'failure',
                 output: {
@@ -168,8 +172,6 @@ function run() {
             core_1.info('Starting sensitivity check..');
             const path = core_1.getInput('path', { required: true });
             const token = core_1.getInput('token', { required: true });
-            const owner = 'Vannevelj';
-            const repo = 'sensitivity';
             const ignoredPathsRaw = core_1.getInput('ignorePaths', { required: false });
             const ignoredPathsArray = ignoredPathsRaw
                 ? JSON.parse(ignoredPathsRaw)
@@ -207,7 +209,7 @@ function run() {
                     }
                     const buffer = yield fs_1.default.promises.readFile(file);
                     const content = buffer.toString();
-                    const fileAnnotations = yield checker_1.check(content, file, 'sensitivity');
+                    const fileAnnotations = checker_1.check(content, file, 'sensitivity');
                     annotations.push(...fileAnnotations);
                 }
             }
@@ -219,8 +221,8 @@ function run() {
                 finally { if (e_2) throw e_2.error; }
             }
             if (annotations.length > 0) {
-                const checkResponse = yield github_1.createCheck(token, owner, repo);
-                yield github_1.updateRunWithAnnotations(token, checkResponse.data.id, owner, repo, annotations);
+                const checkResponse = yield github_1.createCheck(token);
+                yield github_1.updateRunWithAnnotations(token, checkResponse.data.id, annotations);
                 core_1.setFailed('Sensitive data found!');
             }
         }
