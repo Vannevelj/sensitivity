@@ -17,6 +17,7 @@ jobs:
         with:
           path: src
           ignorePaths: '["src/__tests__/checker.*.test.ts"]'
+          token: ${{ secrets.GITHUB_TOKEN }}
 
 ```
 
