@@ -120,6 +120,9 @@ function run() {
             try {
                 for (var _e = __asyncValues(globber.globGenerator()), _f; _f = yield _e.next(), !_f.done;) {
                     const file = _f.value;
+                    if (!(yield fs_1.default.promises.lstat(file)).isFile()) {
+                        continue;
+                    }
                     core_1.info(`Checking ${file}..`);
                     if (ignoredFiles.has(file)) {
                         core_1.debug(`Skipping validation, path is ignored`);
