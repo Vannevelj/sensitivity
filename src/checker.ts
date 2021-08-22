@@ -1,4 +1,4 @@
-import { error } from 'console'
+import { error } from '@actions/core'
 
 export function check(
   content: string,

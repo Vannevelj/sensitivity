@@ -28,11 +28,18 @@ async function run(): Promise<void> {
       '.mp4',
       '.dll',
       '.jpg',
+      '.jpeg',
       '.exe',
       '.ttf',
       '.woff',
       '.css',
-      '.scss'
+      '.scss',
+      '.otf',
+      '.gif',
+      '.svg',
+      '.war',
+      '.jar',
+      '.ico'
     ]
     const ignoredDirectories = ['/node_modules/', '/.git/', '/.nuget/', '/lib/']
     const annotations: Annotation[] = []
