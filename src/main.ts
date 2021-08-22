@@ -31,9 +31,10 @@ async function run(): Promise<void> {
       '.exe',
       '.ttf',
       '.woff',
-      '.css'
+      '.css',
+      '.scss'
     ]
-    const ignoredDirectories = ['node_modules', '.git', '.nuget']
+    const ignoredDirectories = ['/node_modules/', '/.git/', '/.nuget/', '/lib/']
     const annotations: Annotation[] = []
     const globber = await glob.create(`${path}/**/*.*`)
     for await (const file of globber.globGenerator()) {
