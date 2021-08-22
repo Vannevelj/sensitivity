@@ -1,12 +1,14 @@
 import { getInput, setFailed, info, debug } from '@actions/core'
-import { check } from './checker'
+import { Annotation, check } from './checker'
 import fs from 'fs'
 import * as glob from '@actions/glob'
+import { createCheck, updateRunWithAnnotations } from './github'
 
 async function run(): Promise<void> {
   try {
     info('Starting sensitivity check..')
     const path = getInput('path', { required: true })
+    const token = getInput('token', { required: true })
     const ignoredPathsRaw = getInput('ignorePaths', { required: false })
     const ignoredPathsArray = ignoredPathsRaw
       ? (JSON.parse(ignoredPathsRaw) as string[])
@@ -21,6 +23,7 @@ async function run(): Promise<void> {
       }
     }
 
+    const annotations: Annotation[] = []
     const globber = await glob.create(`${path}/**/*.*`)
     for await (const file of globber.globGenerator()) {
       if (!(await fs.promises.lstat(file)).isFile()) {
@@ -35,7 +38,15 @@ async function run(): Promise<void> {
 
       const buffer = await fs.promises.readFile(file)
       const content = buffer.toString()
-      await check(content)
+      const fileAnnotations = check(content, file, 'sensitivity')
+      annotations.push(...fileAnnotations)
+    }
+
+    const checkResponse = await createCheck(token)
+    await updateRunWithAnnotations(token, checkResponse.data.id, annotations)
+
+    if (annotations.length > 0) {
+      setFailed('Sensitive data found!')
     }
   } catch (error) {
     setFailed(error.message)

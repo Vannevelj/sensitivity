@@ -1,9 +1,9 @@
 import { expect, describe, test } from '@jest/globals'
 import { check } from '../checker'
-import { setFailed } from '@actions/core'
 
 jest.mock('@actions/core', () => ({
-  setFailed: jest.fn()
+  setFailed: jest.fn(),
+  error: jest.fn()
 }))
 
 describe('AWS_ACCESS_KEY_ID', () => {
@@ -15,8 +15,8 @@ describe('AWS_ACCESS_KEY_ID', () => {
       "'AKIAIOSFODNN7EXAMPLE'",
       'AKIAIOSFODNN7EXAMPLEERRRR'
     ])('%s', (key: string) => {
-      check(key)
-      expect(setFailed).toHaveBeenCalled()
+      const annotations = check(key, '', '')
+      expect(annotations).toHaveLength(1)
     })
   })
 
@@ -28,8 +28,8 @@ describe('AWS_ACCESS_KEY_ID', () => {
       '',
       'AKIAIOSFODNN7'
     ])('%s', (key: string) => {
-      check(key)
-      expect(setFailed).not.toHaveBeenCalled()
+      const annotations = check(key, '', '')
+      expect(annotations).toHaveLength(0)
     })
   })
 })

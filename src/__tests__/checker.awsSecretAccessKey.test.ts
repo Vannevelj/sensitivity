@@ -1,9 +1,9 @@
 import { expect, describe, test } from '@jest/globals'
 import { check } from '../checker'
-import { setFailed } from '@actions/core'
 
 jest.mock('@actions/core', () => ({
-  setFailed: jest.fn()
+  setFailed: jest.fn(),
+  error: jest.fn()
 }))
 
 describe('AWS_SECRET_ACCESS_KEY', () => {
@@ -14,8 +14,8 @@ describe('AWS_SECRET_ACCESS_KEY', () => {
       "'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'",
       'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY2'
     ])('%s', (key: string) => {
-      check(key)
-      expect(setFailed).toHaveBeenCalled()
+      const annotations = check(key, '', '')
+      expect(annotations).toHaveLength(1)
     })
   })
 
@@ -26,8 +26,8 @@ describe('AWS_SECRET_ACCESS_KEY', () => {
       'wJalrXUtnFEMI0K7MDENG0bPxRfiCYEXAMPLEKEY',
       ''
     ])('%s', (key: string) => {
-      check(key)
-      expect(setFailed).not.toHaveBeenCalled()
+      const annotations = check(key, '', '')
+      expect(annotations).toHaveLength(0)
     })
   })
 })

@@ -1,9 +1,9 @@
 import { expect, describe, test } from '@jest/globals'
 import { check } from '../checker'
-import { setFailed } from '@actions/core'
 
 jest.mock('@actions/core', () => ({
-  setFailed: jest.fn()
+  setFailed: jest.fn(),
+  error: jest.fn()
 }))
 
 describe('ssh', () => {
@@ -15,8 +15,8 @@ describe('ssh', () => {
       '-----BEGIN EC PRIVATE KEY-----',
       '-----BEGIN PGP PRIVATE KEY BLOCK-----'
     ])('%s', (key: string) => {
-      check(key)
-      expect(setFailed).toHaveBeenCalled()
+      const annotations = check(key, '', '')
+      expect(annotations).toHaveLength(1)
     })
   })
 
@@ -28,8 +28,8 @@ describe('ssh', () => {
       '',
       'BEGIN PRIVATE KEY'
     ])('%s', (key: string) => {
-      check(key)
-      expect(setFailed).not.toHaveBeenCalled()
+      const annotations = check(key, '', '')
+      expect(annotations).toHaveLength(0)
     })
   })
 })

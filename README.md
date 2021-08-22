@@ -13,12 +13,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: Vannevelj/sensitivity@v1.1
+      - uses: Vannevelj/sensitivity@v1.2
         with:
           path: src
           ignorePaths: '["src/__tests__/checker.*.test.ts"]'
+          token: ${{ secrets.GITHUB_TOKEN }}
 
 ```
+
+![](https://user-images.githubusercontent.com/2777107/130368748-ebfdbbb4-8035-430f-9704-fb0f90aaa2da.png)
 
 See it on the Marketplace: https://github.com/marketplace/actions/sensitive-data-check
 
