@@ -23,6 +23,10 @@ async function run(): Promise<void> {
 
     const globber = await glob.create(`${path}/**/*.*`)
     for await (const file of globber.globGenerator()) {
+      if (!(await fs.promises.lstat(file)).isFile()) {
+        continue
+      }
+
       info(`Checking ${file}..`)
       if (ignoredFiles.has(file)) {
         debug(`Skipping validation, path is ignored`)
