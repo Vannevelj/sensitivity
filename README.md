@@ -46,7 +46,15 @@ npm test
 
 ## Publish to a distribution branch
 
-Actions are run from GitHub repos so we will checkin the packed dist folder. A husky pre-push hook will build the package and commit the changes, you just need to push them and manually create a new release inside Github.
+Actions are run from GitHub repos so we will checkin the packed dist folder. To generate the updated code, execute the following:
+
+```bash
+npm run all
+git add .
+git commit -m "Generated release files"
+```
+
+You just need to push them and manually create a new release inside Github.
 
 ## Usage:
 
