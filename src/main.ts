@@ -9,8 +9,6 @@ async function run(): Promise<void> {
     info('Starting sensitivity check..')
     const path = getInput('path', { required: true })
     const token = getInput('token', { required: true })
-    const owner = 'Vannevelj'
-    const repo = 'sensitivity'
     const ignoredPathsRaw = getInput('ignorePaths', { required: false })
     const ignoredPathsArray = ignoredPathsRaw
       ? (JSON.parse(ignoredPathsRaw) as string[])
@@ -40,17 +38,15 @@ async function run(): Promise<void> {
 
       const buffer = await fs.promises.readFile(file)
       const content = buffer.toString()
-      const fileAnnotations = await check(content, file, 'sensitivity')
+      const fileAnnotations = check(content, file, 'sensitivity')
       annotations.push(...fileAnnotations)
     }
 
     if (annotations.length > 0) {
-      const checkResponse = await createCheck(token, owner, repo)
+      const checkResponse = await createCheck(token)
       await updateRunWithAnnotations(
         token,
         checkResponse.data.id,
-        owner,
-        repo,
         annotations
       )
       setFailed('Sensitive data found!')

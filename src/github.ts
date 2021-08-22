@@ -1,20 +1,21 @@
 import { Annotation } from './checker'
-import { getOctokit } from '@actions/github'
+import { getOctokit, context } from '@actions/github'
 import { RestEndpointMethodTypes } from '@octokit/rest'
 
 type ChecksCreateResponse = RestEndpointMethodTypes['checks']['create']['response']
+const checkName = 'Some test name'
 
 export async function createCheck(
-  token: string,
-  owner: string,
-  repo: string
+  token: string
 ): Promise<ChecksCreateResponse> {
   const octokit = getOctokit(token)
 
   const response = await octokit.rest.checks.create({
-    owner,
-    repo,
-    status: 'in_progress'
+    owner: context.repo.owner,
+    repo: context.repo.repo,
+    status: 'in_progress',
+    head_sha: context.payload.pull_request?.head.sha ?? context.sha,
+    name: checkName
   })
 
   return response
@@ -23,20 +24,18 @@ export async function createCheck(
 export async function updateRunWithAnnotations(
   token: string,
   checkRunId: number,
-  owner: string,
-  repo: string,
   annotations: Annotation[]
 ) {
   const octokit = getOctokit(token)
 
   if (annotations.length === 0) {
     await octokit.request(
-      `PATCH /repos/${owner}/${repo}/check-runs/${checkRunId}`,
+      `PATCH /repos/${context.repo.owner}/${context.repo.repo}/check-runs/${checkRunId}`,
       {
-        owner,
-        repo,
+        owner: context.repo.owner,
+        repo: context.repo.repo,
         check_run_id: checkRunId,
-        name: 'some test name',
+        name: checkName,
         status: 'completed',
         conclusion: 'success'
       }
@@ -48,12 +47,12 @@ export async function updateRunWithAnnotations(
     const status = i < annotations.length ? 'in_progress' : 'completed'
     const annotationsForPage = annotations.slice(i, i + 50)
     await octokit.request(
-      `PATCH /repos/${owner}/${repo}/check-runs/${checkRunId}`,
+      `PATCH /repos/${context.repo.owner}/${context.repo.repo}/check-runs/${checkRunId}`,
       {
-        owner,
-        repo,
+        owner: context.repo.owner,
+        repo: context.repo.repo,
         check_run_id: checkRunId,
-        name: 'some test name',
+        name: checkName,
         status,
         conclusion: 'failure',
         output: {
