@@ -100,12 +100,13 @@ function updateRunWithAnnotations(token, checkRunId, annotations) {
             });
             return;
         }
+        const violatingFiles = Array.from(new Set(annotations.map(v => v.path)));
         const octokitAnnotationsPerRequest = 50;
         for (let i = 0; i < annotations.length; i += octokitAnnotationsPerRequest) {
             core_1.info(`Sending violations ${i} to ${Math.min(i + 49, annotations.length)}`);
             const status = i < annotations.length ? 'in_progress' : 'completed';
             const annotationsForPage = annotations.slice(i, i + 50);
-            const response = yield octokit.request(`PATCH /repos/${github_1.context.repo.owner}/${github_1.context.repo.repo}/check-runs/${checkRunId}`, {
+            yield octokit.request(`PATCH /repos/${github_1.context.repo.owner}/${github_1.context.repo.repo}/check-runs/${checkRunId}`, {
                 owner: github_1.context.repo.owner,
                 repo: github_1.context.repo.repo,
                 check_run_id: checkRunId,
@@ -115,9 +116,7 @@ function updateRunWithAnnotations(token, checkRunId, annotations) {
                 output: {
                     title: `Sensitivity check results`,
                     summary: `${annotations.length} violations have been found`,
-                    text: `Found violations in the following files: \n* ${annotations
-                        .map(v => v.path)
-                        .join('\n* ')}`,
+                    text: `Found violations in the following files: \n* ${violatingFiles.join('\n* ')}`,
                     annotations: annotationsForPage
                 }
             });
