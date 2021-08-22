@@ -21,6 +21,8 @@ jobs:
 
 ```
 
+![](https://user-images.githubusercontent.com/2777107/130368748-ebfdbbb4-8035-430f-9704-fb0f90aaa2da.png)
+
 See it on the Marketplace: https://github.com/marketplace/actions/sensitive-data-check
 
 ### Parameters

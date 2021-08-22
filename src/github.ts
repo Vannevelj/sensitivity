@@ -4,7 +4,7 @@ import { RestEndpointMethodTypes } from '@octokit/rest'
 import { info } from '@actions/core'
 
 type ChecksCreateResponse = RestEndpointMethodTypes['checks']['create']['response']
-const checkName = 'Some test name'
+const checkName = 'Sensitivity Check Results'
 
 export async function createCheck(
   token: string
