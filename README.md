@@ -17,8 +17,9 @@ jobs:
         with:
           path: src
           ignorePaths: '["src/__tests__/checker.*.test.ts"]'
-
 ```
+
+See it on the Marketplace: https://github.com/marketplace/actions/sensitive-data-check
 
 ### Parameters
 
