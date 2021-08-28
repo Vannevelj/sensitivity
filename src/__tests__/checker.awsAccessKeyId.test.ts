@@ -2,7 +2,6 @@ import { expect, describe, test } from '@jest/globals'
 import { check } from '../checker'
 
 jest.mock('@actions/core', () => ({
-  setFailed: jest.fn(),
   error: jest.fn()
 }))
 

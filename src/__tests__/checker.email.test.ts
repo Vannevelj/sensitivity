@@ -2,9 +2,11 @@ import { expect, describe, test } from '@jest/globals'
 import { check } from '../checker'
 
 jest.mock('@actions/core', () => ({
-  setFailed: jest.fn(),
-  error: jest.fn()
+  error: jest.fn(),
+  getInput: jest.fn()
 }))
+
+import * as coreActions from '@actions/core'
 
 describe('email address', () => {
   describe('invalid', () => {
@@ -46,5 +48,35 @@ describe('email address', () => {
         expect(annotations).toHaveLength(0)
       }
     )
+  })
+
+  describe('ignored emails', () => {
+    test('no ignored emails', () => {
+      const spy = jest.spyOn(coreActions, 'getInput')
+      spy.mockImplementation(() => "")
+      const annotations = check('test@example.com', '', '')
+      expect(annotations).toHaveLength(1)
+    })
+
+    test('matching ignored email', () => {
+      const spy = jest.spyOn(coreActions, 'getInput')
+      spy.mockImplementation(() => JSON.stringify([".*@example.com"]))
+      const annotations = check('test@example.com', '', '')
+      expect(annotations).toHaveLength(0)
+    })
+
+    test('non-matching ignored email', () => {
+      const spy = jest.spyOn(coreActions, 'getInput')
+      spy.mockImplementation(() => JSON.stringify([".*@example.net"]))
+      const annotations = check('test@example.com', '', '')
+      expect(annotations).toHaveLength(1)
+    })
+
+    test('multiple ignored emails', () => {
+      const spy = jest.spyOn(coreActions, 'getInput')
+      spy.mockImplementation(() => JSON.stringify(["wowee@test.be", ".*@example.com"]))
+      const annotations = check('test@example.com', '', '')
+      expect(annotations).toHaveLength(0)
+    })
   })
 })

@@ -11,6 +11,9 @@ inputs:
   ignorePaths:
     required: false
     description: 'Optional: globs that will be ignored'
+  ignoreEmails:
+    required: false
+    description: 'Optional: email patterns that will be ignored'
 runs:
   using: 'node12'
   main: 'dist/index.js'

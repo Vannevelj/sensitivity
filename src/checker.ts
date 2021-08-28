@@ -1,4 +1,5 @@
-import { error } from '@actions/core'
+import { error, getInput } from '@actions/core'
+import { debug } from 'console'
 
 export function check(
   content: string,
@@ -11,6 +12,19 @@ export function check(
     lineIndex++
     for (const { type, regex } of regexes) {
       if (regex.test(line)) {
+        if (type === 'email') {
+          const ignoredEmailsRaw = getInput('ignoreEmails', { required: false })
+          const ignoredEmailsArray = ignoredEmailsRaw
+            ? (JSON.parse(ignoredEmailsRaw) as string[]).map(r => new RegExp(r))
+            : []
+
+          // This is a simplistic check, ideally we'd be looking at just the capture group
+          if (ignoredEmailsArray.some(e => e.test(line))) {
+            debug(`Ignoring skipped email: ${line}`)
+            continue;
+          }
+        }
+
         const filename = file.replace(
           `${process.env.RUNNER_WORKSPACE as string}/${repo}/`,
           ''
