@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: Vannevelj/sensitivity@v1.9
+      - uses: Vannevelj/sensitivity@v1.11
         with:
           path: src
           token: ${{ secrets.GITHUB_TOKEN }}
