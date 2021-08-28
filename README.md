@@ -18,7 +18,7 @@ jobs:
           path: src
           token: ${{ secrets.GITHUB_TOKEN }}
           ignorePaths: '["src/__tests__/checker.*.test.ts"]'
-          ignoreEmails: '["*@example.com"]'
+          ignoreEmails: '[".*@example.com"]'
 
 ```
 
