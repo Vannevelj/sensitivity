@@ -21,7 +21,7 @@ export function check(
           // This is a simplistic check, ideally we'd be looking at just the capture group
           if (ignoredEmailsArray.some(e => e.test(line))) {
             debug(`Ignoring skipped email: ${line}`)
-            continue;
+            continue
           }
         }
 

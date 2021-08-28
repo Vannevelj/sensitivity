@@ -9,6 +9,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.check = void 0;
 const core_1 = __nccwpck_require__(2186);
+const console_1 = __nccwpck_require__(7082);
 function check(content, file, repo) {
     let lineIndex = 0;
     const annotations = [];
@@ -16,6 +17,17 @@ function check(content, file, repo) {
         lineIndex++;
         for (const { type, regex } of regexes) {
             if (regex.test(line)) {
+                if (type === 'email') {
+                    const ignoredEmailsRaw = core_1.getInput('ignoreEmails', { required: false });
+                    const ignoredEmailsArray = ignoredEmailsRaw
+                        ? JSON.parse(ignoredEmailsRaw).map(r => new RegExp(r))
+                        : [];
+                    // This is a simplistic check, ideally we'd be looking at just the capture group
+                    if (ignoredEmailsArray.some(e => e.test(line))) {
+                        console_1.debug(`Ignoring skipped email: ${line}`);
+                        continue;
+                    }
+                }
                 const filename = file.replace(`${process.env.RUNNER_WORKSPACE}/${repo}/`, '');
                 annotations.push({
                     path: filename,
@@ -8891,6 +8903,14 @@ module.exports = eval("require")("encoding");
 
 "use strict";
 module.exports = require("assert");
+
+/***/ }),
+
+/***/ 7082:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("console");
 
 /***/ }),
 
