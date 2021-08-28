@@ -13,7 +13,7 @@ inputs:
     description: 'Optional: globs that will be ignored'
   ignoreEmails:
     required: false
-    description: 'Optional: email patterns that will be ignored'
+    description: 'Optional: email patterns that will be ignored (regex)'
 runs:
   using: 'node12'
   main: 'dist/index.js'

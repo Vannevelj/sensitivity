@@ -33,7 +33,7 @@ See it on the Marketplace: https://github.com/marketplace/actions/sensitive-data
 | path  | Yes  | The path to your root folder, e.g. src  |
 | token | Yes | Github authentication token, i.e. `${{ secrets.GITHUB_TOKEN }}` |
 | ignorePaths  | No  | Array of globs for paths that will be ignored  |
-| ignoreEmails | No | Array of email patterns that will be ignored |
+| ignoreEmails | No | Array of email patterns (regex) that will be ignored |
 
 ## Contributing
 
